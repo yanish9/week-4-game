@@ -8,57 +8,58 @@ var opponentHealth;
 var myAttack ;
 var opponentHealth;
 
-var player;
+var name ;
+var health;
+var attack; 
 
-var obi= {
-	name: "Obi One" ,
-	attack: "8",
-	health: "110",
+var opponent;
+var me;
 
-	getName: function () {
-		return this.name;
+var characters = [];
 
-	}
+function player (name, attack, health) {
 
-}
-
-var luke= {
-	name: "Luke" ,
-	attack: 12,
-	health: 150
+this.name = name ;
+this.health =  health;
+this.attack= attack;
 
 }
 
-var maul= {
-	name: "Maul", 
-	attack: 10,
-	health: 100
-}
 
-var sidious= {
-	name: "sidious", 
-	attack: 8,
-	health: 100
 
-}
 
-var user;
+var obi= new player("Obi One" , "8", "110");
+characters.push(obi);
+
+var luke= new player("Luke" ,"12","150");
+characters.push(luke);
+
+
+var maul= new player("Maul", "10", "100");
+characters.push(maul);
+
+var sidious= new player ("sidious", "8","100");
+characters.push(sidious);
+
 
 
 
 $(".click").on("click", function (i,j) {
 	
 var obii = $("#obi").data(obi);
-console.log(obii.name);
+//console.log(obii.name);
 
 	/* body... */
 if (!playing) {
 if (!choosen) {
 	$(".me").append($(this));
 
+me = characters[$(this).attr("value")];
+
+console.log($(this).attr("value"));
 	choosen = true;
 	myHealth = select();
-	myAttack = selectAttack();
+	//myAttack = selectAttack();
 
 }
 
@@ -66,9 +67,7 @@ if (!choosen) {
 else
 {
 	$(".opponent").append($(this));
-	opponentHealth = select();
-	opponentAttack = selectAttack();
-
+	opponent = characters[$(this).attr("value")];
 	playing = true;
 }
 
@@ -79,17 +78,30 @@ else
 $(".attack").on("click", function (i,j) {
 
 console.log("opponentHealth" + opponentHealth);
-myHealth = parseInt(myHealth) - parseInt(opponentAttack);
+me.health = parseInt(me.health) - parseInt(opponent.attack);
 //$(".health").html(myHealth);
 
-opponentHealth = opponentHealth -  myAttack;
+opponent.health -=  me.attack;
 
-$(".opponent > .click > .characters > .health").html(opponentHealth);
+me.attack = parseInt(me.attack) + 8;
+
+$(".opponent > .click > .characters > .health").html(opponent.health);
+
+$(".me > .click > .characters > .health").html(me.health);
+
+if (opponent.health <0 ) {
+
+	$("#mid").append("<h2>select next opponent</h2>");
+	$(".opponent").empty();
+	playing = false;
+
+}
+
 
 //setOppHealth(opponentHealth);
-console.log(opponentHealth);
-console.log("Wa"+myAttack);
-myAttack = parseInt(myAttack) + 8;
+//console.log(opponentHealth);
+//console.log("Wa"+myAttack);
+//myAttack = parseInt(myAttack) + 8;
 
 
 
@@ -101,7 +113,6 @@ myAttack = parseInt(myAttack) + 8;
 function setOppHealth (user) {
 
 
-console.log();
 switch (player) {
 		case "obi":
 $(".obi-health").html(user);
@@ -131,9 +142,11 @@ $(".obi-health").html(user);
 
 
 
-function select (user) {
+function select (player) {
 
- player = $(".characters").attr('value');
+ //player = $(this).attr('value');
+
+console.log(player);
 
 	switch (player) {
 		case "obi":
@@ -160,32 +173,5 @@ function select (user) {
 
 }
 
-function selectAttack (user) {
 
-	 player = $(".characters").attr('value');
-
-	switch (player) {
-		case "obi":
-
-			return obi.attack;
-
-			break;
-
-			case "luke":
-			return  luke.attack;
-			break;
-
-			case "maul":
-			return  maul.attack;
-			break;
-
-			case "sidious":
-			return sidious.attack;
-			break;
-		default:
-			// statements_def
-			break;
-	}
-
-}
 
