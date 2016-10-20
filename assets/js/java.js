@@ -1,6 +1,9 @@
-
+ $(document).ready(function(){
 var choosen =false;
 var playing = false;
+
+var characters_div = '<div class="col-sm-2 obi click" value = 0><div class="characters " > Obi Wan Kenobi <img src="assets/images/Ben.png" alt="">	<div class="health">10</div></div></div>';
+
 
 var myHealth;
 var opponentHealth;
@@ -17,6 +20,14 @@ var me;
 
 var characters = [];
 
+var obi;
+var luke;
+var maul;
+var sidious;
+
+var count = 0;
+
+
 function player (name, attack, health) {
 
 this.name = name ;
@@ -25,41 +36,66 @@ this.attack= attack;
 
 }
 
+setNewGame();
 
-
-
-var obi= new player("Obi One" , "8", "110");
+function setNewGame (argument) {
+ 	
+ obi= new player("Obi One" , "8", "110");
 characters.push(obi);
 
-var luke= new player("Luke" ,"12","150");
+ luke= new player("Luke" ,"16s","110");
 characters.push(luke);
 
 
-var maul= new player("Maul", "10", "100");
+ maul= new player("Maul", "20", "120");
 characters.push(maul);
 
-var sidious= new player ("sidious", "8","100");
+ sidious= new player ("sidious", "8","100");
 characters.push(sidious);
 
+playing = false;
+choosen = false;
 
 
 
-$(".click").on("click", function (i,j) {
-	
-var obii = $("#obi").data(obi);
-//console.log(obii.name);
+$(".cha").empty();
 
-	/* body... */
+
+for(var i = 0 ; i <4 ; i++) {
+
+
+var characters_div = '<div class="col-sm-2 click characters" value = '+ i +'>' + characters[i].name +'  <img src="assets/images/'+i+'.jpg" alt="">	<div class="health">'+characters[i].health+'</div></div>';
+ 
+$(".cha").append(characters_div);
+	// body... 
+}
+
+
+
+$(".click").on("click", clickCharacter);
+
+
+$(".next").empty();
+$(".display").empty();
+
+$(".attack").hide();
+
+}
+
+
+
+function clickCharacter (argument) {
+	// body... 
+
+
 if (!playing) {
 if (!choosen) {
+
 	$(".me").append($(this));
 
 me = characters[$(this).attr("value")];
 
-console.log($(this).attr("value"));
-	choosen = true;
-	myHealth = select();
-	//myAttack = selectAttack();
+choosen = true;
 
 }
 
@@ -69,33 +105,65 @@ else
 	$(".opponent").append($(this));
 	opponent = characters[$(this).attr("value")];
 	playing = true;
-}
+	count++;
+	$(".next").empty();
+	$(".attack").show();
 
 }
-});
+
+
+}
+}
+
+
 
 
 $(".attack").on("click", function (i,j) {
 
-console.log("opponentHealth" + opponentHealth);
 me.health = parseInt(me.health) - parseInt(opponent.attack);
 //$(".health").html(myHealth);
 
+
 opponent.health -=  me.attack;
+
+
+$(".display").html("You attacked " + opponent.name + "for " + me.attack+ " damage. <br> Your opponent attacked you back for "+ opponent.attack+ " damage.");
+
 
 me.attack = parseInt(me.attack) + 8;
 
-$(".opponent > .click > .characters > .health").html(opponent.health);
+$(".opponent > .characters > .health").html(opponent.health);
 
-$(".me > .click > .characters > .health").html(me.health);
+$(".me > .characters > .health").html(me.health);
 
 if (opponent.health <0 ) {
 
-	$("#mid").append("<h2>select next opponent</h2>");
+console.log("wa"+ opponent.health);
+
+	$(".next").html("<h2>select next opponent</h2>");
 	$(".opponent").empty();
+	$(".attack").hide();
 	playing = false;
 
 }
+
+
+if (count == 3 ) {
+	setNewGame();
+	$(".opponent").empty();
+	$(".me").empty();
+	alert("You won");
+
+}
+
+if (me.health <0) {
+setNewGame();
+	$(".opponent").empty();
+	$(".me").empty();
+	alert("You lose");
+
+}
+
 
 
 //setOppHealth(opponentHealth);
@@ -110,68 +178,5 @@ if (opponent.health <0 ) {
 
 
 
-function setOppHealth (user) {
 
-
-switch (player) {
-		case "obi":
-$(".obi-health").html(user);
-
-			break;
-
-			case "luke":
-			$(".luke-health").html(user);
-
-			break;
-
-			case "maul":
-			$(".maul-health").html(user);
-
-			break;
-
-			case "sidious":
-			$(".sid-health").html(user);
-
-			break;
-		default:
-			// statements_def
-			break;
-	}
-
-}
-
-
-
-function select (player) {
-
- //player = $(this).attr('value');
-
-console.log(player);
-
-	switch (player) {
-		case "obi":
-
-			return obi.health;
-
-			break;
-
-			case "luke":
-			return  luke.health;
-			break;
-
-			case "maul":
-			return  maul.health;
-			break;
-
-			case "sidious":
-			return sidious.health;
-			break;
-		default:
-			// statements_def
-			break;
-	}
-
-}
-
-
-
+});

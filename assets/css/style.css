@@ -2,6 +2,8 @@ body {
     background-image: url("../images/back.jpg");
 }
 
+ .img-responsive {margin:0 auto;}
+
 .characters{
 
 	width: 250px;
@@ -40,6 +42,20 @@ img{
 	height: 200px;
 }
 
+.opponent, .me{
+	margin-left: 20%;
+}
+
 .attack{
-	margin: 0 auto;
+margin-top: 10%;
+font-size: 2em;
+}
+
+.display{
+	font-size: 2em;
+text-align: center;
+}
+
+.next{
+	color: #593BD9
 }
